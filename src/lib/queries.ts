@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { api } from './api'
+import { api, apiForm } from './api'
 import type { Categoria, EstadoConservacao, Material, MeuMaterial, Solicitacao } from './types'
 
 export const chaves = {
@@ -39,12 +39,22 @@ export interface NovoMaterial {
   categoria: Categoria
   estadoConservacao: EstadoConservacao
   quantidade: number
+  imagem?: File | null
 }
 
 export function useCriarMaterial() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (dados: NovoMaterial) => api<Material>('/api/materiais', { method: 'POST', body: dados }),
+    mutationFn: (dados: NovoMaterial) => {
+      const form = new FormData()
+      form.append('nome', dados.nome)
+      form.append('categoria', dados.categoria)
+      form.append('estadoConservacao', dados.estadoConservacao)
+      form.append('quantidade', String(dados.quantidade))
+      if (dados.descricao) form.append('descricao', dados.descricao)
+      if (dados.imagem) form.append('imagem', dados.imagem)
+      return apiForm<Material>('/api/materiais', form)
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['materiais'] }),
   })
 }

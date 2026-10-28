@@ -93,19 +93,19 @@ export function MateriaisPage() {
   return (
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-3">
-        <h1 className="max-w-3xl text-3xl font-bold leading-tight text-grafite sm:text-5xl sm:leading-tight">
+        <h1 className="max-w-3xl text-2xl font-bold leading-tight text-grafite sm:text-5xl sm:leading-tight">
           Material escolar parado em casa pode voltar para a sala de aula.
         </h1>
-        <p className="max-w-2xl text-lg text-grafite-suave">
+        <p className="max-w-2xl text-base text-grafite-suave sm:text-lg">
           Quem tem cadernos, livros, mochilas e outros materiais em bom estado cadastra aqui. Quem precisa encontra e
           solicita. Depois do aceite, as duas pessoas combinam a entrega.
         </p>
         {!usuario && (
-          <div className="mt-2 flex flex-wrap gap-3">
-            <Link to="/cadastro" className="inline-flex min-h-11 items-center rounded-lg bg-tinta px-5 font-bold text-white hover:bg-tinta-escura">
+          <div className="mt-2 flex flex-col gap-3 sm:flex-row">
+            <Link to="/cadastro" className="inline-flex min-h-12 items-center justify-center rounded-lg bg-tinta px-5 font-bold text-white hover:bg-tinta-escura">
               Criar conta
             </Link>
-            <Link to="/entrar" className="inline-flex min-h-11 items-center rounded-lg border-2 border-tinta bg-papel px-5 font-bold text-tinta hover:bg-tinta-clara">
+            <Link to="/entrar" className="inline-flex min-h-12 items-center justify-center rounded-lg border-2 border-tinta bg-papel px-5 font-bold text-tinta hover:bg-tinta-clara">
               Entrar
             </Link>
           </div>
@@ -117,19 +117,19 @@ export function MateriaisPage() {
           Materiais disponíveis
         </h2>
 
-        <form onSubmit={buscar} role="search" className="flex gap-2">
-          <label htmlFor="busca" className="sr-only">
+        <form onSubmit={buscar} role=”search” className=”flex gap-2”>
+          <label htmlFor=”busca” className=”sr-only”>
             Buscar material
           </label>
           <input
-            id="busca"
-            type="search"
+            id=”busca”
+            type=”search”
             value={textoBusca}
             onChange={(e) => setTextoBusca(e.target.value)}
-            placeholder="Buscar por nome, como “dicionário”"
+            placeholder=”Buscar material, ex: “dicionário””
             className={classeCampo}
           />
-          <Botao type="submit" variante="secundario">
+          <Botao type=”submit” variante=”secundario” className=”shrink-0”>
             Buscar
           </Botao>
         </form>
@@ -164,6 +164,7 @@ export function MateriaisPage() {
                 <FolhaMaterial
                   nome={m.nome}
                   descricao={m.descricao}
+                  imagem={m.imagem}
                   categoria={m.categoria}
                   estadoConservacao={m.estadoConservacao}
                   quantidade={m.quantidade}

@@ -42,30 +42,20 @@ export function definirAoExpirarSessao(callback: (() => void) | null) {
   aoExpirarSessao = callback
 }
 
-interface Opcoes {
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
-  body?: unknown
-}
-
 interface ProblemDetails {
   title?: string
   errors?: Record<string, string[]>
 }
 
-export async function api<T>(caminho: string, opcoes: Opcoes = {}): Promise<T> {
-  const headers: Record<string, string> = { Accept: 'application/json' }
-  if (opcoes.body !== undefined) headers['Content-Type'] = 'application/json'
-
+async function executarFetch<T>(caminho: string, init: RequestInit): Promise<T> {
   const token = tokenStorage.get()
-  if (token) headers.Authorization = `Bearer ${token}`
+  if (token) {
+    init.headers = { ...(init.headers as Record<string, string>), Authorization: `Bearer ${token}` }
+  }
 
   let resposta: Response
   try {
-    resposta = await fetch(`${BASE_URL}${caminho}`, {
-      method: opcoes.method ?? 'GET',
-      headers,
-      body: opcoes.body !== undefined ? JSON.stringify(opcoes.body) : undefined,
-    })
+    resposta = await fetch(`${BASE_URL}${caminho}`, init)
   } catch {
     throw new ApiError(0, 'Não foi possível conectar ao servidor. Verifique sua internet e tente de novo.')
   }
@@ -96,4 +86,28 @@ export async function api<T>(caminho: string, opcoes: Opcoes = {}): Promise<T> {
 
   const texto = await resposta.text()
   return (texto ? JSON.parse(texto) : undefined) as T
+}
+
+interface Opcoes {
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  body?: unknown
+}
+
+export async function api<T>(caminho: string, opcoes: Opcoes = {}): Promise<T> {
+  const headers: Record<string, string> = { Accept: 'application/json' }
+  if (opcoes.body !== undefined) headers['Content-Type'] = 'application/json'
+
+  return executarFetch<T>(caminho, {
+    method: opcoes.method ?? 'GET',
+    headers,
+    body: opcoes.body !== undefined ? JSON.stringify(opcoes.body) : undefined,
+  })
+}
+
+export async function apiForm<T>(caminho: string, body: FormData, method: 'POST' | 'PUT' = 'POST'): Promise<T> {
+  return executarFetch<T>(caminho, {
+    method,
+    headers: { Accept: 'application/json' },
+    body,
+  })
 }

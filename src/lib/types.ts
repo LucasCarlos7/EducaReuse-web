@@ -33,6 +33,7 @@ export interface Material {
   id: string
   nome: string
   descricao: string | null
+  imagem: string | null
   categoria: Categoria
   estadoConservacao: EstadoConservacao
   quantidade: number
@@ -45,6 +46,7 @@ export interface MeuMaterial {
   id: string
   nome: string
   descricao: string | null
+  imagem: string | null
   categoria: Categoria
   estadoConservacao: EstadoConservacao
   quantidade: number

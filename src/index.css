@@ -51,6 +51,13 @@
     font-size: 1.0625rem;
   }
 
+  /* Reserva espaço para o bottom nav no iOS com home indicator */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .pb-16 {
+      padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+    }
+  }
+
   :focus-visible {
     outline: 3px solid var(--color-lapis);
     outline-offset: 2px;

@@ -115,6 +115,7 @@ export function MinhasDoacoesPage() {
                 <FolhaMaterial
                   nome={m.nome}
                   descricao={m.descricao}
+                  imagem={m.imagem}
                   categoria={m.categoria}
                   estadoConservacao={m.estadoConservacao}
                   quantidade={m.quantidade}
