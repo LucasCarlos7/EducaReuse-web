@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
+
+  --color-mesa: #eef2f7;
+  --color-papel: #fdfdfb;
+  --color-tinta: #1f3fa6;
+  --color-tinta-escura: #172f7d;
+  --color-tinta-clara: #e6ecfa;
+  --color-grafite: #262a31;
+  --color-grafite-suave: #59606c;
+  --color-pauta: #cfdcef;
+  --color-margem: #d64545;
+  --color-lapis: #f2b705;
+  --color-lapis-claro: #fdf3cf;
+  --color-folha: #2f7d4f;
+  --color-folha-clara: #e3f2e8;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-mesa text-grafite font-sans antialiased;
+    font-size: 1.0625rem;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-lapis);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Folha de caderno: pauta azul a cada 28px e margem vermelha à esquerda. */
+  .folha-caderno {
+    background-color: var(--color-papel);
+    background-image:
+      linear-gradient(to right, transparent 30px, var(--color-margem) 30px, var(--color-margem) 32px, transparent 32px),
+      repeating-linear-gradient(to bottom, transparent 0, transparent 27px, var(--color-pauta) 27px, var(--color-pauta) 28px);
+    background-position: 0 0, 0 14px;
+    padding: 14px 20px 14px 48px;
+    line-height: 28px;
+  }
+}
