@@ -117,19 +117,19 @@ export function MateriaisPage() {
           Materiais disponíveis
         </h2>
 
-        <form onSubmit={buscar} role=”search” className=”flex gap-2”>
-          <label htmlFor=”busca” className=”sr-only”>
+        <form onSubmit={buscar} role="search" className="flex gap-2">
+          <label htmlFor="busca" className="sr-only">
             Buscar material
           </label>
           <input
-            id=”busca”
-            type=”search”
+            id="busca"
+            type="search"
             value={textoBusca}
             onChange={(e) => setTextoBusca(e.target.value)}
-            placeholder=”Buscar material, ex: “dicionário””
+            placeholder="Buscar material, ex: “dicionário”"
             className={classeCampo}
           />
-          <Botao type=”submit” variante=”secundario” className=”shrink-0”>
+          <Botao type="submit" variante="secundario" className="shrink-0">
             Buscar
           </Botao>
         </form>
