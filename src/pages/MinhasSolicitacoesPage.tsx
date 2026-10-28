@@ -29,7 +29,7 @@ export function MinhasSolicitacoesPage() {
       {data && data.length > 0 && (
         <ul className="grid gap-4 md:grid-cols-2">
           {data.map((s) => (
-            <li key={s.id} className="flex flex-col gap-3 rounded-xl border-2 border-pauta bg-white p-4">
+            <li key={s.id} className="flex flex-col gap-3 rounded-xl border-2 border-pauta bg-papel p-4">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <p className="text-sm font-bold text-tinta">{categorias[s.categoria]}</p>

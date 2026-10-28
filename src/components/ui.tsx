@@ -6,8 +6,8 @@ type Variante = 'primario' | 'secundario' | 'perigo' | 'discreto'
 
 const estilosBotao: Record<Variante, string> = {
   primario: 'bg-tinta text-white hover:bg-tinta-escura',
-  secundario: 'bg-white text-tinta border-2 border-tinta hover:bg-tinta-clara',
-  perigo: 'bg-white text-margem border-2 border-margem hover:bg-red-50',
+  secundario: 'bg-papel text-tinta border-2 border-tinta hover:bg-tinta-clara',
+  perigo: 'bg-papel text-margem border-2 border-margem hover:bg-[var(--color-erro-fundo)]',
   discreto: 'bg-transparent text-tinta hover:bg-tinta-clara',
 }
 
@@ -31,7 +31,7 @@ export function Botao({
 }
 
 export const classeCampo =
-  'w-full rounded-lg border-2 border-pauta bg-white px-3 py-2.5 text-grafite placeholder:text-grafite-suave/70 focus:border-tinta focus:outline-none aria-invalid:border-margem'
+  'w-full rounded-lg border-2 border-pauta bg-papel px-3 py-2.5 text-grafite placeholder:text-grafite-suave/70 focus:border-tinta focus:outline-none aria-invalid:border-margem'
 
 export function Campo({
   rotulo,
@@ -64,7 +64,7 @@ export function Campo({
 
 export function Aviso({ tipo = 'erro', children }: { tipo?: 'erro' | 'sucesso' | 'info'; children: ReactNode }) {
   const estilos = {
-    erro: 'border-margem bg-red-50 text-margem',
+    erro: 'border-margem bg-[var(--color-erro-fundo)] text-margem',
     sucesso: 'border-folha bg-folha-clara text-folha',
     info: 'border-tinta bg-tinta-clara text-tinta-escura',
   }[tipo]
@@ -99,8 +99,8 @@ const coresEtiqueta = {
   azul: 'bg-tinta-clara text-tinta-escura',
   amarelo: 'bg-lapis-claro text-grafite',
   verde: 'bg-folha-clara text-folha',
-  vermelho: 'bg-red-50 text-margem',
-  cinza: 'bg-slate-100 text-grafite-suave',
+  vermelho: 'bg-[var(--color-erro-fundo)] text-margem',
+  cinza: 'bg-[var(--color-cinza-fundo)] text-grafite-suave',
 }
 
 export function Etiqueta({ cor = 'azul', children }: { cor?: keyof typeof coresEtiqueta; children: ReactNode }) {
@@ -122,7 +122,7 @@ export function Cabecalho({ titulo, children }: { titulo: string; children?: Rea
 
 export function Vazio({ titulo, children, acao }: { titulo: string; children?: ReactNode; acao?: { texto: string; para: string } }) {
   return (
-    <div className="rounded-xl border-2 border-dashed border-pauta bg-white px-6 py-10 text-center">
+    <div className="rounded-xl border-2 border-dashed border-pauta bg-papel px-6 py-10 text-center">
       <p className="text-lg font-bold">{titulo}</p>
       {children && <p className="mt-1 text-grafite-suave">{children}</p>}
       {acao && (

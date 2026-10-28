@@ -50,7 +50,7 @@ function AcaoSolicitar({ material }: { material: Material }) {
   }
 
   return (
-    <form onSubmit={enviar} className="flex flex-col gap-2 rounded-lg bg-white/90 p-3">
+    <form onSubmit={enviar} className="flex flex-col gap-2 rounded-lg bg-papel/90 p-3">
       <label htmlFor={`msg-${material.id}`} className="text-sm font-bold">
         Mensagem para quem doa (opcional)
       </label>
@@ -105,7 +105,7 @@ export function MateriaisPage() {
             <Link to="/cadastro" className="inline-flex min-h-11 items-center rounded-lg bg-tinta px-5 font-bold text-white hover:bg-tinta-escura">
               Criar conta
             </Link>
-            <Link to="/entrar" className="inline-flex min-h-11 items-center rounded-lg border-2 border-tinta bg-white px-5 font-bold text-tinta hover:bg-tinta-clara">
+            <Link to="/entrar" className="inline-flex min-h-11 items-center rounded-lg border-2 border-tinta bg-papel px-5 font-bold text-tinta hover:bg-tinta-clara">
               Entrar
             </Link>
           </div>
@@ -185,7 +185,7 @@ function BotaoCategoria({ ativo, onClick, children }: { ativo: boolean; onClick:
       onClick={onClick}
       aria-pressed={ativo}
       className={`min-h-10 whitespace-nowrap rounded-full border-2 px-4 font-bold transition-colors ${
-        ativo ? 'border-tinta bg-tinta text-white' : 'border-pauta bg-white text-grafite hover:border-tinta'
+        ativo ? 'border-tinta bg-tinta text-white' : 'border-pauta bg-papel text-grafite hover:border-tinta'
       }`}
     >
       {children}

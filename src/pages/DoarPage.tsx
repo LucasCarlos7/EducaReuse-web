@@ -53,7 +53,7 @@ export function DoarPage() {
         Descreva o material com clareza. Quem precisa vai ver estas informações antes de solicitar.
       </Cabecalho>
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5 rounded-xl bg-white p-6 shadow-sm">
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5 rounded-xl bg-papel p-6 shadow-sm">
         <ErroApi erro={criar.error} />
 
         <Campo rotulo="Nome do material" htmlFor="nome" erro={errors.nome?.message} dica="Ex.: Caderno universitário 10 matérias">
@@ -77,7 +77,7 @@ export function DoarPage() {
           <legend className="mb-1.5 font-bold">Estado de conservação</legend>
           <div className="flex flex-wrap gap-3">
             {listaEstados.map((e) => (
-              <label key={e} className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border-2 border-pauta bg-white px-3 has-checked:border-tinta has-checked:bg-tinta-clara">
+              <label key={e} className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border-2 border-pauta bg-papel px-3 has-checked:border-tinta has-checked:bg-tinta-clara">
                 <input type="radio" value={e} className="h-4 w-4 accent-tinta" {...register('estadoConservacao')} />
                 {estadosConservacao[e]}
               </label>

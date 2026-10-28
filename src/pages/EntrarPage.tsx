@@ -42,7 +42,7 @@ export function EntrarPage() {
     <div className="mx-auto max-w-md">
       <Cabecalho titulo="Entrar">Use o e-mail e a senha que você cadastrou.</Cabecalho>
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5 rounded-xl bg-white p-6 shadow-sm">
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5 rounded-xl bg-papel p-6 shadow-sm">
         <ErroApi erro={erro} />
 
         <Campo rotulo="E-mail" htmlFor="email" erro={errors.email?.message}>

@@ -53,7 +53,7 @@ export function CadastroPage() {
         Cada conta tem um perfil. Se quiser doar e também receber materiais, crie duas contas com e-mails diferentes.
       </Cabecalho>
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5 rounded-xl bg-white p-6 shadow-sm">
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5 rounded-xl bg-papel p-6 shadow-sm">
         <ErroApi erro={erro} />
 
         <fieldset className="flex flex-col gap-2">

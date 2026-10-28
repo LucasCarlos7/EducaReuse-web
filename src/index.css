@@ -19,6 +19,29 @@
 }
 
 @layer base {
+  :root {
+    --color-erro-fundo: #fef2f2;
+    --color-cinza-fundo: #f1f5f9;
+  }
+
+  .dark {
+    --color-mesa: #0d1117;
+    --color-papel: #1e2b3e;
+    --color-tinta: #5b7ee5;
+    --color-tinta-escura: #7a9af0;
+    --color-tinta-clara: #1a2444;
+    --color-grafite: #dde3ea;
+    --color-grafite-suave: #8895a7;
+    --color-pauta: #2e4a72;
+    --color-margem: #e06060;
+    --color-lapis: #f2b705;
+    --color-lapis-claro: #26200a;
+    --color-folha: #3da367;
+    --color-folha-clara: #0f2118;
+    --color-erro-fundo: #2d0f0f;
+    --color-cinza-fundo: #1e2330;
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
   }
@@ -50,7 +73,7 @@
     background-image:
       linear-gradient(to right, transparent 30px, var(--color-margem) 30px, var(--color-margem) 32px, transparent 32px),
       repeating-linear-gradient(to bottom, transparent 0, transparent 27px, var(--color-pauta) 27px, var(--color-pauta) 28px);
-    background-position: 0 0, 0 14px;
+    background-position: 0 0, 0 5px;
     padding: 14px 20px 14px 48px;
     line-height: 28px;
   }
