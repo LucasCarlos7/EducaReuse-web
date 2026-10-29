@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       {
         path: '/doar',
         element: (
-          <RotaProtegida perfil="Doador">
+          <RotaProtegida>
             <DoarPage />
           </RotaProtegida>
         ),
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       {
         path: '/minhas-doacoes',
         element: (
-          <RotaProtegida perfil="Doador">
+          <RotaProtegida>
             <MinhasDoacoesPage />
           </RotaProtegida>
         ),
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
       {
         path: '/minhas-solicitacoes',
         element: (
-          <RotaProtegida perfil="Beneficiario">
+          <RotaProtegida>
             <MinhasSolicitacoesPage />
           </RotaProtegida>
         ),

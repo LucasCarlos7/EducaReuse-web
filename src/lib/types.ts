@@ -1,5 +1,3 @@
-export type Perfil = 'Doador' | 'Beneficiario'
-
 export type Categoria =
   | 'Caderno'
   | 'Livro'
@@ -21,7 +19,6 @@ export interface Usuario {
   nome: string
   email: string
   telefone: string | null
-  perfil: Perfil
 }
 
 export interface AuthResponse {
@@ -40,6 +37,7 @@ export interface Material {
   status: StatusMaterial
   doadorNome: string
   criadoEm: string
+  ehMeu: boolean
 }
 
 export interface MeuMaterial {

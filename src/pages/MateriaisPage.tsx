@@ -20,8 +20,15 @@ function AcaoSolicitar({ material }: { material: Material }) {
     )
   }
 
-  if (usuario.perfil !== 'Beneficiario') {
-    return <p className="text-sm text-grafite-suave">Doado por {material.doadorNome}</p>
+  if (material.ehMeu) {
+    return (
+      <p className="text-sm text-grafite-suave">
+        Você cadastrou este material.{' '}
+        <Link to="/minhas-doacoes" className="font-bold text-tinta underline underline-offset-4">
+          Ver pedidos
+        </Link>
+      </p>
+    )
   }
 
   if (solicitar.isSuccess) {
@@ -151,7 +158,7 @@ export function MateriaisPage() {
         {data && data.length === 0 && (
           <Vazio
             titulo={filtrando ? 'Nenhum material encontrado com esse filtro.' : 'Ainda não há materiais disponíveis.'}
-            acao={usuario?.perfil === 'Doador' ? { texto: 'Doar material', para: '/doar' } : undefined}
+            acao={usuario ? { texto: 'Doar material', para: '/doar' } : undefined}
           >
             {filtrando ? 'Tente outra categoria ou outra palavra.' : 'Volte em breve: novos materiais podem ser cadastrados a qualquer momento.'}
           </Vazio>

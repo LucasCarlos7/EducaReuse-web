@@ -99,16 +99,12 @@ function NavInferior() {
         { para: '/entrar', label: 'Entrar', icone: <IconUser /> },
         { para: '/cadastro', label: 'Cadastro', icone: <IconUserPlus /> },
       ]
-    : usuario.perfil === 'Doador'
-      ? [
-          { para: '/', label: 'Materiais', icone: <IconHome /> },
-          { para: '/doar', label: 'Doar', icone: <IconPlus /> },
-          { para: '/minhas-doacoes', label: 'Doações', icone: <IconClipboard /> },
-        ]
-      : [
-          { para: '/', label: 'Materiais', icone: <IconHome /> },
-          { para: '/minhas-solicitacoes', label: 'Solicitações', icone: <IconClipboard /> },
-        ]
+    : [
+        { para: '/', label: 'Materiais', icone: <IconHome /> },
+        { para: '/doar', label: 'Doar', icone: <IconPlus /> },
+        { para: '/minhas-doacoes', label: 'Doações', icone: <IconClipboard /> },
+        { para: '/minhas-solicitacoes', label: 'Pedidos', icone: <IconUser /> },
+      ]
 
   return (
     <nav
@@ -170,13 +166,13 @@ export function Layout() {
           <nav aria-label="Principal" className="hidden items-center gap-1 sm:flex">
             <BotaoTema />
             <LinkNav para="/">Materiais</LinkNav>
-            {usuario?.perfil === 'Doador' && (
+            {usuario && (
               <>
                 <LinkNav para="/doar">Doar material</LinkNav>
                 <LinkNav para="/minhas-doacoes">Minhas doações</LinkNav>
+                <LinkNav para="/minhas-solicitacoes">Minhas solicitações</LinkNav>
               </>
             )}
-            {usuario?.perfil === 'Beneficiario' && <LinkNav para="/minhas-solicitacoes">Minhas solicitações</LinkNav>}
             {!usuario && (
               <>
                 <LinkNav para="/entrar">Entrar</LinkNav>
@@ -195,8 +191,8 @@ export function Layout() {
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-8 sm:py-8">
         {usuario && (
           <p className="mb-6 text-grafite-suave">
-            Olá, <strong className="text-grafite">{usuario.nome.split(' ')[0]}</strong>. Você está usando a conta de{' '}
-            {usuario.perfil === 'Doador' ? 'doador' : 'beneficiário'}.
+            Olá, <strong className="text-grafite">{usuario.nome.split(' ')[0]}</strong>. Você pode doar materiais e também
+            solicitar os que precisar.
           </p>
         )}
         <Outlet />

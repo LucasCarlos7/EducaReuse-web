@@ -77,7 +77,7 @@ async function executarFetch<T>(caminho: string, init: RequestInit): Promise<T> 
     }
 
     if (resposta.status === 401 && token) mensagem = 'Sua sessão expirou. Entre novamente.'
-    if (resposta.status === 403) mensagem = 'Seu perfil não tem acesso a esta ação.'
+    if (resposta.status === 403) mensagem = 'Você não tem permissão para esta ação.'
 
     throw new ApiError(resposta.status, mensagem, campos)
   }

@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { api, definirAoExpirarSessao, tokenStorage } from '../lib/api'
-import type { AuthResponse, Perfil, Usuario } from '../lib/types'
+import type { AuthResponse, Usuario } from '../lib/types'
 
 const CHAVE_USUARIO = 'educareuse.usuario'
 
@@ -10,7 +10,6 @@ export interface DadosCadastro {
   email: string
   senha: string
   telefone?: string
-  perfil: Perfil
 }
 
 interface AuthContextValue {
