@@ -1,11 +1,11 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { useEffect, useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { ApiError } from '../lib/api'
 
 type Variante = 'primario' | 'secundario' | 'perigo' | 'discreto'
 
 const estilosBotao: Record<Variante, string> = {
-  primario: 'bg-tinta text-white hover:bg-tinta-escura',
+  primario: 'bg-tinta text-sobre-tinta hover:bg-tinta-escura',
   secundario: 'bg-papel text-tinta border-2 border-tinta hover:bg-tinta-clara',
   perigo: 'bg-papel text-margem border-2 border-margem hover:bg-[var(--color-erro-fundo)]',
   discreto: 'bg-transparent text-tinta hover:bg-tinta-clara',
@@ -105,7 +105,7 @@ const coresEtiqueta = {
 
 export function Etiqueta({ cor = 'azul', children }: { cor?: keyof typeof coresEtiqueta; children: ReactNode }) {
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-sm font-bold leading-6 ${coresEtiqueta[cor]}`}>
+    <span className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-full px-2.5 py-0.5 text-sm font-bold leading-6 ${coresEtiqueta[cor]}`}>
       {children}
     </span>
   )
@@ -126,7 +126,7 @@ export function Vazio({ titulo, children, acao }: { titulo: string; children?: R
       <p className="text-lg font-bold">{titulo}</p>
       {children && <p className="mt-1 text-grafite-suave">{children}</p>}
       {acao && (
-        <Link to={acao.para} className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-tinta px-4 font-bold text-white hover:bg-tinta-escura">
+        <Link to={acao.para} className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-tinta px-4 font-bold text-sobre-tinta hover:bg-tinta-escura">
           {acao.texto}
         </Link>
       )}
@@ -134,10 +134,25 @@ export function Vazio({ titulo, children, acao }: { titulo: string; children?: R
   )
 }
 
+// No plano gratuito do Render a API "dorme" e o primeiro acesso pode levar até 1 minuto.
+const ESPERA_AVISO_MS = 5000
+
 export function Carregando({ texto = 'Carregando…' }: { texto?: string }) {
+  const [demorando, setDemorando] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDemorando(true), ESPERA_AVISO_MS)
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
-    <p className="py-10 text-center text-grafite-suave" role="status">
-      {texto}
-    </p>
+    <div className="flex flex-col items-center gap-2 py-10 text-center text-grafite-suave" role="status">
+      <p>{texto}</p>
+      {demorando && (
+        <p className="max-w-sm text-sm">
+          O servidor está iniciando. No primeiro acesso do dia isso pode levar até 1 minuto. Não feche a página.
+        </p>
+      )}
+    </div>
   )
 }

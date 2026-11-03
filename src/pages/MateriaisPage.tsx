@@ -96,33 +96,35 @@ export function MateriaisPage() {
   }
 
   const filtrando = !!categoria || !!busca
+  // Para quem está logado a lista é o conteúdo principal da página.
+  const TituloLista = usuario ? 'h1' : 'h2'
 
   return (
     <div className="flex flex-col gap-8">
-      <section className="flex flex-col gap-3">
-        <h1 className="max-w-3xl text-2xl font-bold leading-tight text-grafite sm:text-5xl sm:leading-tight">
-          Material escolar parado em casa pode voltar para a sala de aula.
-        </h1>
-        <p className="max-w-2xl text-base text-grafite-suave sm:text-lg">
-          Quem tem cadernos, livros, mochilas e outros materiais em bom estado cadastra aqui. Quem precisa encontra e
-          solicita. Depois do aceite, as duas pessoas combinam a entrega.
-        </p>
-        {!usuario && (
+      {!usuario && (
+        <section className="flex flex-col gap-3">
+          <h1 className="max-w-3xl text-2xl font-bold leading-tight text-grafite sm:text-5xl sm:leading-tight">
+            Material escolar parado em casa pode voltar para a sala de aula.
+          </h1>
+          <p className="max-w-2xl text-base text-grafite-suave sm:text-lg">
+            Quem tem cadernos, livros, mochilas e outros materiais em bom estado cadastra aqui. Quem precisa encontra e
+            solicita. Depois do aceite, as duas pessoas combinam a entrega.
+          </p>
           <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-            <Link to="/cadastro" className="inline-flex min-h-12 items-center justify-center rounded-lg bg-tinta px-5 font-bold text-white hover:bg-tinta-escura">
+            <Link to="/cadastro" className="inline-flex min-h-12 items-center justify-center rounded-lg bg-tinta px-5 font-bold text-sobre-tinta hover:bg-tinta-escura">
               Criar conta
             </Link>
             <Link to="/entrar" className="inline-flex min-h-12 items-center justify-center rounded-lg border-2 border-tinta bg-papel px-5 font-bold text-tinta hover:bg-tinta-clara">
               Entrar
             </Link>
           </div>
-        )}
-      </section>
+        </section>
+      )}
 
       <section aria-labelledby="titulo-lista" className="flex flex-col gap-4">
-        <h2 id="titulo-lista" className="text-2xl font-bold">
+        <TituloLista id="titulo-lista" className="text-2xl font-bold sm:text-3xl">
           Materiais disponíveis
-        </h2>
+        </TituloLista>
 
         <form onSubmit={buscar} role="search" className="flex gap-2">
           <label htmlFor="busca" className="sr-only">
@@ -133,7 +135,7 @@ export function MateriaisPage() {
             type="search"
             value={textoBusca}
             onChange={(e) => setTextoBusca(e.target.value)}
-            placeholder="Buscar material, ex: “dicionário”"
+            placeholder="Ex.: dicionário"
             className={classeCampo}
           />
           <Botao type="submit" variante="secundario" className="shrink-0">
@@ -193,7 +195,7 @@ function BotaoCategoria({ ativo, onClick, children }: { ativo: boolean; onClick:
       onClick={onClick}
       aria-pressed={ativo}
       className={`min-h-10 whitespace-nowrap rounded-full border-2 px-4 font-bold transition-colors ${
-        ativo ? 'border-tinta bg-tinta text-white' : 'border-pauta bg-papel text-grafite hover:border-tinta'
+        ativo ? 'border-tinta bg-tinta text-sobre-tinta' : 'border-pauta bg-papel text-grafite hover:border-tinta'
       }`}
     >
       {children}

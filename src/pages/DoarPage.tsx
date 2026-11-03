@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { Botao, Cabecalho, Campo, ErroApi, classeCampo } from '../components/ui'
+import { ErroImagem, reduzirImagem } from '../lib/imagem'
 import { useCriarMaterial } from '../lib/queries'
 import { categorias, estadosConservacao, listaCategorias, listaEstados } from '../lib/types'
 
@@ -31,6 +32,12 @@ export function DoarPage() {
   const [previewImagem, setPreviewImagem] = useState<string | null>(null)
   const [erroImagem, setErroImagem] = useState<string | null>(null)
   const [arquivoImagem, setArquivoImagem] = useState<File | null>(null)
+  const [preparandoImagem, setPreparandoImagem] = useState(false)
+
+  // Libera a memória da pré-visualização anterior.
+  useEffect(() => () => {
+    if (previewImagem) URL.revokeObjectURL(previewImagem)
+  }, [previewImagem])
 
   const {
     register,
@@ -41,7 +48,7 @@ export function DoarPage() {
     defaultValues: { quantidade: 1 },
   })
 
-  function onChangeImagem(e: React.ChangeEvent<HTMLInputElement>) {
+  async function onChangeImagem(e: React.ChangeEvent<HTMLInputElement>) {
     const arquivo = e.target.files?.[0] ?? null
     setErroImagem(null)
     setPreviewImagem(null)
@@ -49,19 +56,21 @@ export function DoarPage() {
 
     if (!arquivo) return
 
-    if (!arquivo.type.startsWith('image/')) {
-      setErroImagem('Envie um arquivo de imagem (JPEG, PNG, WebP).')
-      return
+    setPreparandoImagem(true)
+    try {
+      const reduzida = await reduzirImagem(arquivo)
+      if (reduzida.size > TAMANHO_MAX) {
+        setErroImagem('A foto continua grande demais mesmo depois de reduzida. Tente outra.')
+        return
+      }
+      setArquivoImagem(reduzida)
+      setPreviewImagem(URL.createObjectURL(reduzida))
+    } catch (erro) {
+      setErroImagem(erro instanceof ErroImagem ? erro.message : 'Não foi possível preparar a foto. Tente outra.')
+      if (inputImagemRef.current) inputImagemRef.current.value = ''
+    } finally {
+      setPreparandoImagem(false)
     }
-    if (arquivo.size > TAMANHO_MAX) {
-      setErroImagem('A imagem deve ter no máximo 5 MB.')
-      return
-    }
-
-    setArquivoImagem(arquivo)
-    const reader = new FileReader()
-    reader.onload = (ev) => setPreviewImagem(ev.target?.result as string)
-    reader.readAsDataURL(arquivo)
   }
 
   function removerImagem() {
@@ -144,7 +153,7 @@ export function DoarPage() {
               <button
                 type="button"
                 onClick={removerImagem}
-                className="absolute right-2 top-2 rounded-full bg-grafite/70 px-2 py-0.5 text-xs text-papel hover:bg-grafite"
+                className="absolute right-2 top-2 inline-flex min-h-10 items-center rounded-full bg-black/70 px-4 text-sm font-bold text-white hover:bg-black/80"
               >
                 Remover
               </button>
@@ -154,13 +163,14 @@ export function DoarPage() {
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-8 w-8 opacity-40" aria-hidden="true">
                 <path fillRule="evenodd" d="M1 8a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 018.07 3h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0016.07 6H17a2 2 0 012 2v7a2 2 0 01-2 2H3a2 2 0 01-2-2V8zm13.5 3a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM10 14a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clipRule="evenodd" />
               </svg>
-              <span className="font-bold">Toque para adicionar foto</span>
-              <span className="text-xs">JPEG, PNG ou WebP · máx. 5 MB</span>
+              <span className="font-bold">{preparandoImagem ? 'Preparando a foto…' : 'Tirar foto ou escolher da galeria'}</span>
+              <span className="text-xs">A foto é reduzida automaticamente antes do envio.</span>
               <input
                 ref={inputImagemRef}
                 type="file"
-                accept="image/jpeg,image/png,image/webp"
+                accept="image/*"
                 className="sr-only"
+                disabled={preparandoImagem}
                 onChange={onChangeImagem}
               />
             </label>
@@ -172,7 +182,7 @@ export function DoarPage() {
           )}
         </div>
 
-        <Botao type="submit" carregando={criar.isPending}>
+        <Botao type="submit" carregando={criar.isPending} disabled={preparandoImagem}>
           Cadastrar material
         </Botao>
       </form>

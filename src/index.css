@@ -8,6 +8,7 @@
   --color-tinta: #1f3fa6;
   --color-tinta-escura: #172f7d;
   --color-tinta-clara: #e6ecfa;
+  --color-sobre-tinta: #ffffff;
   --color-grafite: #262a31;
   --color-grafite-suave: #59606c;
   --color-pauta: #cfdcef;
@@ -27,13 +28,14 @@
   .dark {
     --color-mesa: #0d1117;
     --color-papel: #1e2b3e;
-    --color-tinta: #5b7ee5;
-    --color-tinta-escura: #7a9af0;
+    --color-tinta: #7b98ee;
+    --color-tinta-escura: #a9bdf6;
+    --color-sobre-tinta: #0d1117;
     --color-tinta-clara: #1a2444;
     --color-grafite: #dde3ea;
     --color-grafite-suave: #8895a7;
     --color-pauta: #2e4a72;
-    --color-margem: #e06060;
+    --color-margem: #f08a8a;
     --color-lapis: #f2b705;
     --color-lapis-claro: #26200a;
     --color-folha: #3da367;

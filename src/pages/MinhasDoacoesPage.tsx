@@ -40,7 +40,7 @@ function CartaoSolicitacaoRecebida({ solicitacao }: { solicitacao: Solicitacao }
 
       {solicitacao.mensagem && <blockquote className="border-l-4 border-pauta pl-3 italic text-grafite">“{solicitacao.mensagem}”</blockquote>}
 
-      <DadosContato contato={solicitacao.contato} papel="beneficiário" />
+      <DadosContato contato={solicitacao.contato} papel="beneficiário" material={solicitacao.materialNome} />
       <ErroApi erro={responder.error} />
 
       {solicitacao.status === 'Pendente' && (
@@ -81,7 +81,7 @@ export function MinhasDoacoesPage() {
       {aviso && <Aviso tipo="sucesso">{aviso}</Aviso>}
 
       <section aria-labelledby="titulo-recebidas" className="flex flex-col gap-4">
-        <h2 id="titulo-recebidas" className="flex items-center gap-3 text-2xl font-bold">
+        <h2 id="titulo-recebidas" className="flex flex-wrap items-center gap-x-3 gap-y-1 text-2xl font-bold">
           Solicitações recebidas
           {pendentes > 0 && <Etiqueta cor="amarelo">{pendentes === 1 ? '1 aguardando' : `${pendentes} aguardando`}</Etiqueta>}
         </h2>

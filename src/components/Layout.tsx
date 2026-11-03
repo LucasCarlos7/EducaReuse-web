@@ -35,6 +35,14 @@ function IconUser() {
   )
 }
 
+function IconInbox() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6" aria-hidden="true">
+      <path fillRule="evenodd" d="M10 2a.75.75 0 01.75.75v6.69l1.97-1.97a.75.75 0 111.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L6.22 8.53a.75.75 0 011.06-1.06l1.97 1.97V2.75A.75.75 0 0110 2zM3.5 11a1 1 0 011-1h1.6a1 1 0 01.9.55l.5 1a1 1 0 00.9.55h3.2a1 1 0 00.9-.55l.5-1a1 1 0 01.9-.55h1.6a1 1 0 011 1v4.5A2.5 2.5 0 0114 18H6a2.5 2.5 0 01-2.5-2.5V11z" clipRule="evenodd" />
+    </svg>
+  )
+}
+
 function IconUserPlus() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6" aria-hidden="true">
@@ -65,7 +73,7 @@ function BotaoTema() {
     <button
       onClick={alternar}
       aria-label={tema === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
-      className="rounded-lg p-2 text-grafite-suave transition-colors hover:text-tinta"
+      className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-grafite-suave transition-colors hover:text-tinta"
     >
       {tema === 'dark' ? <IcneSol /> : <IcneLua />}
     </button>
@@ -103,7 +111,7 @@ function NavInferior() {
         { para: '/', label: 'Materiais', icone: <IconHome /> },
         { para: '/doar', label: 'Doar', icone: <IconPlus /> },
         { para: '/minhas-doacoes', label: 'Doações', icone: <IconClipboard /> },
-        { para: '/minhas-solicitacoes', label: 'Pedidos', icone: <IconUser /> },
+        { para: '/minhas-solicitacoes', label: 'Solicitações', icone: <IconInbox /> },
       ]
 
   return (
@@ -189,12 +197,6 @@ export function Layout() {
       </header>
 
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-8 sm:py-8">
-        {usuario && (
-          <p className="mb-6 text-grafite-suave">
-            Olá, <strong className="text-grafite">{usuario.nome.split(' ')[0]}</strong>. Você pode doar materiais e também
-            solicitar os que precisar.
-          </p>
-        )}
         <Outlet />
       </main>
 

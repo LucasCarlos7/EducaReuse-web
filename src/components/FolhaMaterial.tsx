@@ -15,10 +15,10 @@ interface Props {
 // Cartão de material desenhado como uma folha de caderno pautada.
 export function FolhaMaterial({ nome, descricao, imagem, categoria, estadoConservacao, quantidade, rodape, destaque }: Props) {
   return (
-    <article className="folha-caderno flex h-full flex-col rounded-xl border-2 border-pauta shadow-[0_1px_0_var(--color-pauta)]">
+    <article className="folha-caderno flex h-full flex-col overflow-hidden rounded-xl border-2 border-pauta shadow-[0_1px_0_var(--color-pauta)]">
       {imagem && (
-        // margens negativas compensam o padding (20px lateral, 14px topo) + borda (2px) da .folha-caderno
-        <div className="-mx-[22px] -mt-[16px] mb-3 overflow-hidden rounded-t-xl">
+        // margens negativas anulam o padding da .folha-caderno (48px à esquerda, 20px à direita, 14px no topo)
+        <div className="-mt-[14px] -mr-[20px] mb-3 -ml-[48px]">
           <img src={imagem} alt={nome} className="h-40 w-full object-cover" />
         </div>
       )}

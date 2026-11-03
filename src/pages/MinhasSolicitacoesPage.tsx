@@ -39,7 +39,7 @@ export function MinhasSolicitacoesPage() {
                 <EtiquetaStatus status={s.status} />
               </div>
               <p>{explicacao[s.status]}</p>
-              <DadosContato contato={s.contato} papel="doador" />
+              <DadosContato contato={s.contato} papel="doador" material={s.materialNome} />
             </li>
           ))}
         </ul>
