@@ -39,6 +39,9 @@ export function MinhasSolicitacoesPage() {
                 <EtiquetaStatus status={s.status} />
               </div>
               <p>{explicacao[s.status]}</p>
+              {s.status === 'Recusada' && s.obsRecusa && (
+                <blockquote className="border-l-4 border-pauta pl-3 italic text-grafite">"{s.obsRecusa}"</blockquote>
+              )}
               <DadosContato contato={s.contato} papel="doador" material={s.materialNome} />
             </li>
           ))}

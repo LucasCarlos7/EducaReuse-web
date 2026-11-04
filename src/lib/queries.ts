@@ -26,11 +26,19 @@ export function useMeusMateriais() {
 }
 
 export function useMinhasSolicitacoes() {
-  return useQuery({ queryKey: chaves.minhasSolicitacoes, queryFn: () => api<Solicitacao[]>('/api/solicitacoes/minhas') })
+  return useQuery({
+    queryKey: chaves.minhasSolicitacoes,
+    queryFn: () => api<Solicitacao[]>('/api/solicitacoes/minhas'),
+    refetchInterval: 20_000,
+  })
 }
 
 export function useSolicitacoesRecebidas() {
-  return useQuery({ queryKey: chaves.solicitacoesRecebidas, queryFn: () => api<Solicitacao[]>('/api/solicitacoes/recebidas') })
+  return useQuery({
+    queryKey: chaves.solicitacoesRecebidas,
+    queryFn: () => api<Solicitacao[]>('/api/solicitacoes/recebidas'),
+    refetchInterval: 20_000,
+  })
 }
 
 export interface NovoMaterial {
@@ -73,8 +81,11 @@ export type AcaoSolicitacao = 'aceitar' | 'recusar' | 'entregar'
 export function useResponderSolicitacao() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, acao }: { id: string; acao: AcaoSolicitacao }) =>
-      api<void>(`/api/solicitacoes/${id}/${acao}`, { method: 'POST' }),
+    mutationFn: ({ id, acao, obsRecusa }: { id: string; acao: AcaoSolicitacao; obsRecusa?: string }) =>
+      api<void>(`/api/solicitacoes/${id}/${acao}`, {
+        method: 'POST',
+        body: acao === 'recusar' ? { obs: obsRecusa ?? null } : undefined,
+      }),
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['solicitacoes'] }),

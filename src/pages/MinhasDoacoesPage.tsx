@@ -32,13 +32,43 @@ function ModalConfirmacaoAceitar({ onConfirmar, onCancelar }: { onConfirmar: () 
   )
 }
 
+function ModalConfirmacaoRecusar({ onConfirmar, onCancelar }: { onConfirmar: (obs: string) => void; onCancelar: () => void }) {
+  const [obs, setObs] = useState('')
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-recusar-titulo">
+      <div className="absolute inset-0 bg-black/50" onClick={onCancelar} />
+      <div className="relative w-full max-w-sm rounded-2xl border-2 border-pauta bg-papel p-6 shadow-xl">
+        <h2 id="modal-recusar-titulo" className="mb-2 text-lg font-bold">Recusar solicitação?</h2>
+        <p className="mb-4 text-grafite">Você pode deixar uma observação opcional para quem fez o pedido.</p>
+        <textarea
+          className="mb-4 w-full resize-none rounded-lg border-2 border-pauta bg-papel p-3 text-sm focus:border-tinta focus:outline-none"
+          rows={3}
+          maxLength={500}
+          placeholder="Motivo da recusa (opcional)"
+          value={obs}
+          onChange={(e) => setObs(e.target.value)}
+        />
+        <div className="flex justify-end gap-3">
+          <Botao variante="secundario" onClick={onCancelar}>Cancelar</Botao>
+          <Botao variante="perigo" onClick={() => onConfirmar(obs)}>Recusar</Botao>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function CartaoSolicitacaoRecebida({ solicitacao }: { solicitacao: Solicitacao }) {
   const responder = useResponderSolicitacao()
   const [confirmandoAceitacao, setConfirmandoAceitacao] = useState(false)
+  const [confirmandoRecusa, setConfirmandoRecusa] = useState(false)
 
   function executar(acao: AcaoSolicitacao) {
     if (acao === 'aceitar') {
       setConfirmandoAceitacao(true)
+      return
+    }
+    if (acao === 'recusar') {
+      setConfirmandoRecusa(true)
       return
     }
     responder.mutate({ id: solicitacao.id, acao })
@@ -49,10 +79,18 @@ function CartaoSolicitacaoRecebida({ solicitacao }: { solicitacao: Solicitacao }
     responder.mutate({ id: solicitacao.id, acao: 'aceitar' })
   }
 
+  function confirmarRecusa(obs: string) {
+    setConfirmandoRecusa(false)
+    responder.mutate({ id: solicitacao.id, acao: 'recusar', obsRecusa: obs.trim() || undefined })
+  }
+
   return (
     <>
     {confirmandoAceitacao && (
       <ModalConfirmacaoAceitar onConfirmar={confirmarAceitacao} onCancelar={() => setConfirmandoAceitacao(false)} />
+    )}
+    {confirmandoRecusa && (
+      <ModalConfirmacaoRecusar onConfirmar={confirmarRecusa} onCancelar={() => setConfirmandoRecusa(false)} />
     )}
     <li className="flex flex-col gap-3 rounded-xl border-2 border-pauta bg-papel p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">

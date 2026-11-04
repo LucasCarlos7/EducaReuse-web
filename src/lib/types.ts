@@ -66,6 +66,7 @@ export interface Solicitacao {
   categoria: Categoria
   status: StatusSolicitacao
   mensagem: string | null
+  obsRecusa: string | null
   criadoEm: string
   atualizadoEm: string | null
   contato: Contato
