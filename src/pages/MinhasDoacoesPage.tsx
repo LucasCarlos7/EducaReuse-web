@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { DadosContato } from '../components/Contato'
 import { FolhaMaterial } from '../components/FolhaMaterial'
@@ -15,17 +16,44 @@ const corStatusMaterial: Record<StatusMaterial, 'verde' | 'amarelo' | 'cinza'> =
   Doado: 'cinza',
 }
 
+function ModalConfirmacaoAceitar({ onConfirmar, onCancelar }: { onConfirmar: () => void; onCancelar: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+      <div className="absolute inset-0 bg-black/50" onClick={onCancelar} />
+      <div className="relative w-full max-w-sm rounded-2xl border-2 border-pauta bg-papel p-6 shadow-xl">
+        <h2 id="modal-titulo" className="mb-2 text-lg font-bold">Aceitar solicitação?</h2>
+        <p className="mb-6 text-grafite">Ao aceitar, as outras solicitações deste material serão recusadas automaticamente.</p>
+        <div className="flex justify-end gap-3">
+          <Botao variante="secundario" onClick={onCancelar}>Cancelar</Botao>
+          <Botao onClick={onConfirmar}>Aceitar</Botao>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function CartaoSolicitacaoRecebida({ solicitacao }: { solicitacao: Solicitacao }) {
   const responder = useResponderSolicitacao()
+  const [confirmandoAceitacao, setConfirmandoAceitacao] = useState(false)
 
   function executar(acao: AcaoSolicitacao) {
-    if (acao === 'aceitar' && !window.confirm('Ao aceitar, as outras solicitações deste material serão recusadas. Deseja continuar?')) {
+    if (acao === 'aceitar') {
+      setConfirmandoAceitacao(true)
       return
     }
     responder.mutate({ id: solicitacao.id, acao })
   }
 
+  function confirmarAceitacao() {
+    setConfirmandoAceitacao(false)
+    responder.mutate({ id: solicitacao.id, acao: 'aceitar' })
+  }
+
   return (
+    <>
+    {confirmandoAceitacao && (
+      <ModalConfirmacaoAceitar onConfirmar={confirmarAceitacao} onCancelar={() => setConfirmandoAceitacao(false)} />
+    )}
     <li className="flex flex-col gap-3 rounded-xl border-2 border-pauta bg-papel p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
@@ -62,6 +90,7 @@ function CartaoSolicitacaoRecebida({ solicitacao }: { solicitacao: Solicitacao }
         </div>
       )}
     </li>
+    </>
   )
 }
 
