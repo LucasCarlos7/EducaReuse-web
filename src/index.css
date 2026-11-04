@@ -87,6 +87,16 @@
   }
 }
 
+@layer utilities {
+  /* Oculta a barra de scroll mantendo o scroll funcional */
+  .scroll-oculto {
+    scrollbar-width: none;
+  }
+  .scroll-oculto::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @layer components {
   /* Folha de caderno: pauta azul a cada 28px e margem vermelha à esquerda. */
   .folha-caderno {

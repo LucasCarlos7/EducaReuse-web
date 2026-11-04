@@ -143,7 +143,7 @@ export function MateriaisPage() {
           </Botao>
         </form>
 
-        <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" role="group" aria-label="Filtrar por categoria">
+        <div className="-mx-4 flex gap-2 overflow-x-auto scroll-oculto px-4 py-1 sm:-mx-1 sm:flex-wrap sm:overflow-x-visible sm:px-1" role="group" aria-label="Filtrar por categoria">
           <BotaoCategoria ativo={!categoria} onClick={() => setCategoria(undefined)}>
             Todas
           </BotaoCategoria>
