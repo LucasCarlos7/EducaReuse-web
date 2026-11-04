@@ -13,11 +13,12 @@ const classeBotao =
   'inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg px-4 font-bold transition-colors sm:w-auto'
 
 export function DadosContato({ contato, papel, material }: { contato: Contato; papel: string; material: string }) {
-  if (!contato.email && !contato.telefone) return null
+  if (!contato.telefone) return null
 
   const primeiroNome = contato.nome.split(' ')[0]
-  const whatsapp = contato.telefone ? numeroWhatsapp(contato.telefone) : null
+  const whatsapp = numeroWhatsapp(contato.telefone)
   const texto = `Olá, ${primeiroNome}! Falo sobre o material "${material}" do EducaReuse. Podemos combinar a entrega?`
+  const textoCodificado = encodeURIComponent(texto)
 
   return (
     <div className="flex flex-col gap-3 rounded-lg border-l-4 border-tinta bg-tinta-clara px-4 py-3">
@@ -25,36 +26,38 @@ export function DadosContato({ contato, papel, material }: { contato: Contato; p
         Combine a entrega com {contato.nome} ({papel})
       </p>
 
-      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-        {whatsapp && (
+      <p className="text-sm font-medium text-grafite">
+        Telefone: <span className="font-bold text-tinta">{contato.telefone}</span>
+      </p>
+
+      {whatsapp && (
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
           <a
-            href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(texto)}`}
+            href={`https://wa.me/${whatsapp}?text=${textoCodificado}`}
             target="_blank"
             rel="noreferrer"
             className={`${classeBotao} bg-[#1d7a46] text-white hover:bg-[#17663a]`}
           >
             <IconWhatsapp />
-            Chamar no WhatsApp
+            WhatsApp (celular)
           </a>
-        )}
-        {contato.telefone && !whatsapp && (
-          <a href={`tel:${contato.telefone}`} className={`${classeBotao} bg-tinta text-sobre-tinta hover:bg-tinta-escura`}>
-            Ligar para {contato.telefone}
-          </a>
-        )}
-        {contato.email && (
           <a
-            href={`mailto:${contato.email}?subject=${encodeURIComponent(`EducaReuse: ${material}`)}&body=${encodeURIComponent(texto)}`}
-            className={`${classeBotao} border-2 border-tinta bg-papel text-tinta hover:bg-tinta-clara`}
+            href={`https://web.whatsapp.com/send?phone=${whatsapp}&text=${textoCodificado}`}
+            target="_blank"
+            rel="noreferrer"
+            className={`${classeBotao} border-2 border-[#1d7a46] bg-papel text-[#1d7a46] hover:bg-tinta-clara`}
           >
-            Enviar e-mail
+            <IconWhatsapp />
+            WhatsApp Web
           </a>
-        )}
-      </div>
+        </div>
+      )}
 
-      <p className="break-words text-sm text-grafite-suave">
-        {[contato.telefone, contato.email].filter(Boolean).join(' · ')}
-      </p>
+      {!whatsapp && (
+        <a href={`tel:${contato.telefone}`} className={`${classeBotao} bg-tinta text-sobre-tinta hover:bg-tinta-escura`}>
+          Ligar para {contato.telefone}
+        </a>
+      )}
     </div>
   )
 }
