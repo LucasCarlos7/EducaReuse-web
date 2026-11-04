@@ -8,10 +8,30 @@ import { Botao, Cabecalho, Campo, ErroApi, classeCampo } from '../components/ui'
 
 const schema = z.object({
   nome: z.string().trim().min(1, 'Informe seu nome.').max(120, 'Use no máximo 120 caracteres.'),
-  email: z.email('Informe um e-mail válido.').max(160),
-  telefone: z.string().trim().max(20, 'Use no máximo 20 caracteres.').optional(),
+  email: z
+    .string()
+    .trim()
+    .min(1, 'Informe seu e-mail.')
+    .email('Informe um e-mail válido.')
+    .max(160, 'E-mail muito longo.'),
+  telefone: z
+    .string()
+    .trim()
+    .min(1, 'Informe seu telefone ou WhatsApp.')
+    .refine(
+      (v) => { const d = v.replace(/\D/g, ''); return d.length === 10 || d.length === 11 },
+      'Informe um telefone com DDD e 10 ou 11 dígitos.',
+    ),
   senha: z.string().min(8, 'A senha deve ter pelo menos 8 caracteres.').max(100),
 })
+
+function mascaraTelefone(valor: string): string {
+  const d = valor.replace(/\D/g, '').slice(0, 11)
+  if (d.length <= 2) return d.length ? `(${d}` : ''
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`
+}
 
 type Formulario = z.infer<typeof schema>
 
@@ -23,6 +43,7 @@ export function CadastroPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<Formulario>({ resolver: zodResolver(schema) })
 
@@ -31,7 +52,7 @@ export function CadastroPage() {
   async function onSubmit(dados: Formulario) {
     setErro(null)
     try {
-      await cadastrar({ ...dados, telefone: dados.telefone || undefined })
+      await cadastrar({ ...dados, telefone: dados.telefone })
       navigate('/', { replace: true })
     } catch (e) {
       setErro(e)
@@ -56,12 +77,23 @@ export function CadastroPage() {
         </Campo>
 
         <Campo
-          rotulo="Telefone ou WhatsApp (opcional)"
+          rotulo="Telefone ou WhatsApp"
           htmlFor="telefone"
           erro={errors.telefone?.message}
-          dica="Só aparece para a outra pessoa depois que uma doação é aceita."
+          dica="Usado para combinar a entrega quando uma doação for aceita."
         >
-          <input id="telefone" type="tel" autoComplete="tel" className={classeCampo} aria-invalid={!!errors.telefone} {...register('telefone')} />
+          <input
+            id="telefone"
+            type="tel"
+            autoComplete="tel"
+            inputMode="numeric"
+            placeholder="(XX) XXXXX-XXXX"
+            className={classeCampo}
+            aria-invalid={!!errors.telefone}
+            {...register('telefone', {
+              onChange: (e) => setValue('telefone', mascaraTelefone(e.target.value), { shouldValidate: true }),
+            })}
+          />
         </Campo>
 
         <Campo rotulo="Senha" htmlFor="senha" erro={errors.senha?.message} dica="Pelo menos 8 caracteres.">
