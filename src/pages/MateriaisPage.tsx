@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
-import { FolhaMaterial } from '../components/FolhaMaterial'
+import { FolhaMaterial, iconeCategoria } from '../components/FolhaMaterial'
 import { Aviso, Botao, Carregando, ErroApi, Vazio, classeCampo } from '../components/ui'
 import { useMateriais, useSolicitarMaterial } from '../lib/queries'
 import { categorias, listaCategorias, type Categoria, type Material } from '../lib/types'
@@ -102,7 +102,13 @@ export function MateriaisPage() {
   return (
     <div className="flex flex-col gap-8">
       {!usuario && (
-        <section className="flex flex-col gap-3">
+        <section className="flex flex-col gap-4">
+          {data && data.length > 0 && (
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border-2 border-folha-clara bg-folha-clara px-4 py-1.5 text-sm font-bold text-folha">
+              <span className="h-2 w-2 shrink-0 rounded-full bg-folha" aria-hidden="true" />
+              {data.length} {data.length === 1 ? 'material disponível agora' : 'materiais disponíveis agora'}
+            </div>
+          )}
           <h1 className="max-w-3xl text-2xl font-bold leading-tight text-grafite sm:text-5xl sm:leading-tight">
             Material escolar parado em casa pode voltar para a sala de aula.
           </h1>
@@ -110,13 +116,21 @@ export function MateriaisPage() {
             Quem tem cadernos, livros, mochilas e outros materiais em bom estado cadastra aqui. Quem precisa encontra e
             solicita. Depois do aceite, as duas pessoas combinam a entrega.
           </p>
-          <div className="mt-2 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-1 flex flex-col gap-3 sm:flex-row">
             <Link to="/cadastro" className="inline-flex min-h-12 items-center justify-center rounded-lg bg-tinta px-5 font-bold text-sobre-tinta hover:bg-tinta-escura">
               Criar conta
             </Link>
             <Link to="/entrar" className="inline-flex min-h-12 items-center justify-center rounded-lg border-2 border-tinta bg-papel px-5 font-bold text-tinta hover:bg-tinta-clara">
               Entrar
             </Link>
+          </div>
+          <div className="flex flex-wrap gap-2 pt-1">
+            {listaCategorias.map((c) => (
+              <span key={c} className="inline-flex items-center gap-1.5 rounded-lg border-2 border-pauta bg-papel px-3 py-1.5 text-sm text-grafite-suave">
+                <span aria-hidden="true">{iconeCategoria[c]}</span>
+                {categorias[c]}
+              </span>
+            ))}
           </div>
         </section>
       )}
@@ -148,7 +162,7 @@ export function MateriaisPage() {
             Todas
           </BotaoCategoria>
           {listaCategorias.map((c) => (
-            <BotaoCategoria key={c} ativo={categoria === c} onClick={() => setCategoria(c)}>
+            <BotaoCategoria key={c} ativo={categoria === c} onClick={() => setCategoria(c)} icone={iconeCategoria[c]}>
               {categorias[c]}
             </BotaoCategoria>
           ))}
@@ -188,16 +202,17 @@ export function MateriaisPage() {
   )
 }
 
-function BotaoCategoria({ ativo, onClick, children }: { ativo: boolean; onClick: () => void; children: string }) {
+function BotaoCategoria({ ativo, onClick, icone, children }: { ativo: boolean; onClick: () => void; icone?: string; children: string }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={ativo}
-      className={`min-h-10 whitespace-nowrap rounded-full border-2 px-4 font-bold transition-colors ${
+      className={`inline-flex items-center gap-1.5 min-h-10 whitespace-nowrap rounded-full border-2 px-4 font-bold transition-colors ${
         ativo ? 'border-tinta bg-tinta text-sobre-tinta' : 'border-pauta bg-papel text-grafite hover:border-tinta'
       }`}
     >
+      {icone && <span aria-hidden="true">{icone}</span>}
       {children}
     </button>
   )

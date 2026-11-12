@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { DadosContato } from '../components/Contato'
 import { FolhaMaterial } from '../components/FolhaMaterial'
 import { EtiquetaStatus } from '../components/StatusSolicitacao'
 import { Aviso, Botao, Cabecalho, Carregando, ErroApi, Etiqueta, Vazio } from '../components/ui'
 import { formatarData } from '../lib/format'
-import { useMeusMateriais, useResponderSolicitacao, useSolicitacoesRecebidas, type AcaoSolicitacao } from '../lib/queries'
-import { categorias, statusMaterial, type Solicitacao, type StatusMaterial } from '../lib/types'
+import { useExcluirMaterial, useMeusMateriais, useResponderSolicitacao, useSolicitacoesRecebidas, type AcaoSolicitacao } from '../lib/queries'
+import { categorias, statusMaterial, type MeuMaterial, type Solicitacao, type StatusMaterial } from '../lib/types'
 
 const ordemStatus = { Pendente: 0, Aceita: 1, Entregue: 2, Recusada: 3 } as const
 
@@ -132,6 +132,56 @@ function CartaoSolicitacaoRecebida({ solicitacao }: { solicitacao: Solicitacao }
   )
 }
 
+function ModalConfirmacaoExcluir({ nome, onConfirmar, onCancelar }: { nome: string; onConfirmar: () => void; onCancelar: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-excluir-titulo">
+      <div className="absolute inset-0 bg-black/50" onClick={onCancelar} />
+      <div className="relative w-full max-w-sm rounded-2xl border-2 border-pauta bg-papel p-6 shadow-xl">
+        <h2 id="modal-excluir-titulo" className="mb-2 text-lg font-bold">Excluir doação?</h2>
+        <p className="mb-6 text-grafite">
+          Tem certeza que deseja excluir <strong>"{nome}"</strong>? Esta ação não pode ser desfeita.
+        </p>
+        <div className="flex justify-end gap-3">
+          <Botao variante="secundario" onClick={onCancelar}>Cancelar</Botao>
+          <Botao variante="perigo" onClick={onConfirmar}>Excluir</Botao>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function AcoesMaterial({ material }: { material: MeuMaterial }) {
+  const navigate = useNavigate()
+  const excluir = useExcluirMaterial()
+  const [confirmandoExclusao, setConfirmandoExclusao] = useState(false)
+
+  if (material.status === 'Doado') return null
+
+  return (
+    <>
+      {confirmandoExclusao && (
+        <ModalConfirmacaoExcluir
+          nome={material.nome}
+          onConfirmar={() => {
+            setConfirmandoExclusao(false)
+            excluir.mutate(material.id)
+          }}
+          onCancelar={() => setConfirmandoExclusao(false)}
+        />
+      )}
+      <div className="flex flex-wrap gap-2">
+        <Botao variante="secundario" onClick={() => navigate(`/minhas-doacoes/editar/${material.id}`)}>
+          Editar
+        </Botao>
+        <Botao variante="perigo" carregando={excluir.isPending} onClick={() => setConfirmandoExclusao(true)}>
+          Excluir
+        </Botao>
+      </div>
+      <ErroApi erro={excluir.error} />
+    </>
+  )
+}
+
 export function MinhasDoacoesPage() {
   const location = useLocation()
   const aviso = (location.state as { aviso?: string } | null)?.aviso
@@ -188,11 +238,14 @@ export function MinhasDoacoesPage() {
                   quantidade={m.quantidade}
                   destaque={<Etiqueta cor={corStatusMaterial[m.status]}>{statusMaterial[m.status]}</Etiqueta>}
                   rodape={
-                    <p className="text-sm text-grafite-suave">
-                      Cadastrado em {formatarData(m.criadoEm)}
-                      {m.solicitacoesPendentes > 0 &&
-                        `, ${m.solicitacoesPendentes} ${m.solicitacoesPendentes === 1 ? 'pedido aguardando' : 'pedidos aguardando'}`}
-                    </p>
+                    <div className="flex flex-col gap-3">
+                      <p className="text-sm text-grafite-suave">
+                        Cadastrado em {formatarData(m.criadoEm)}
+                        {m.solicitacoesPendentes > 0 &&
+                          `, ${m.solicitacoesPendentes} ${m.solicitacoesPendentes === 1 ? 'pedido aguardando' : 'pedidos aguardando'}`}
+                      </p>
+                      <AcoesMaterial material={m} />
+                    </div>
                   }
                 />
               </li>

@@ -3,6 +3,7 @@ import { Layout } from './components/Layout'
 import { RotaProtegida } from './components/RotaProtegida'
 import { CadastroPage } from './pages/CadastroPage'
 import { DoarPage } from './pages/DoarPage'
+import { EditarDoacaoPage } from './pages/EditarDoacaoPage'
 import { EntrarPage } from './pages/EntrarPage'
 import { MateriaisPage } from './pages/MateriaisPage'
 import { MinhasDoacoesPage } from './pages/MinhasDoacoesPage'
@@ -29,6 +30,14 @@ const router = createBrowserRouter([
         element: (
           <RotaProtegida>
             <MinhasDoacoesPage />
+          </RotaProtegida>
+        ),
+      },
+      {
+        path: '/minhas-doacoes/editar/:id',
+        element: (
+          <RotaProtegida>
+            <EditarDoacaoPage />
           </RotaProtegida>
         ),
       },

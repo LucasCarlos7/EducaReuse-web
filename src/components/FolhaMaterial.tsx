@@ -12,7 +12,7 @@ interface Props {
   destaque?: ReactNode
 }
 
-const iconeCategoria: Record<Categoria, string> = {
+export const iconeCategoria: Record<Categoria, string> = {
   Caderno: '📓',
   Livro: '📚',
   Mochila: '🎒',

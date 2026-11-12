@@ -67,6 +67,43 @@ export function useCriarMaterial() {
   })
 }
 
+export interface EdicaoMaterial {
+  id: string
+  nome: string
+  descricao?: string
+  categoria: Categoria
+  estadoConservacao: EstadoConservacao
+  quantidade: number
+  imagem?: File | null
+  removerImagem?: boolean
+}
+
+export function useEditarMaterial() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (dados: EdicaoMaterial) => {
+      const form = new FormData()
+      form.append('nome', dados.nome)
+      form.append('categoria', dados.categoria)
+      form.append('estadoConservacao', dados.estadoConservacao)
+      form.append('quantidade', String(dados.quantidade))
+      if (dados.descricao) form.append('descricao', dados.descricao)
+      if (dados.imagem) form.append('imagem', dados.imagem)
+      if (dados.removerImagem) form.append('removerImagem', 'true')
+      return apiForm<Material>(`/api/materiais/${dados.id}`, form, 'PUT')
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['materiais'] }),
+  })
+}
+
+export function useExcluirMaterial() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => api<void>(`/api/materiais/${id}`, { method: 'DELETE' }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['materiais'] }),
+  })
+}
+
 export function useSolicitarMaterial() {
   const queryClient = useQueryClient()
   return useMutation({
